@@ -1,109 +1,77 @@
 <unattend>
 <!--
+https://schneegans.de/windows/unattend-generator/?LanguageMode=Unattended&UILanguage=en-US&Locale=en-US&Keyboard=00000409&GeoLocation=244&ProcessorArchitecture=amd64&BypassRequirementsCheck=true&BypassNetworkCheck=true&HidePowerShellWindows=true&ComputerNameMode=Custom&ComputerName=67-computer&CompactOsMode=Default&TimeZoneMode=Implicit&PartitionMode=Unattended&PartitionLayout=GPT&EspSize=300&RecoveryMode=Partition&RecoverySize=1000&DiskAssertionMode=Skip&WindowsEditionMode=Generic&WindowsEdition=pro&InstallFromMode=Name&InstallFromName=Windows+11+Pro&PEMode=Default&UserAccountMode=Unattended&AccountName0=Admin&AccountDisplayName0=saba67&AccountPassword0=sabuka&AccountGroup0=Administrators&AutoLogonMode=Own&PasswordExpirationMode=Unlimited&LockoutMode=Default&HideFiles=None&TaskbarSearch=Icon&TaskbarIconsMode=Default&DisableWidgets=true&LeftTaskbar=true&HideTaskViewButton=true&DisableBingResults=true&StartTilesMode=Default&StartPinsMode=Empty&EffectsMode=Performance&DeleteEdgeDesktopIcon=true&DesktopIconsMode=Custom&IconControlPanel=true&IconDownloads=true&IconRecycleBin=true&IconThisPC=true&StartFoldersMode=Custom&StartFolderDownloads=true&StartFolderFileExplorer=true&WifiMode=Skip&ExpressSettings=DisableAll&LockKeysMode=Skip&StickyKeysMode=Disabled&ColorMode=Default&WallpaperMode=Default&LockScreenMode=Default&Remove3DViewer=true&RemoveBingSearch=true&RemoveCamera=true&RemoveClipchamp=true&RemoveClock=true&RemoveCopilot=true&RemoveCortana=true&RemoveDevHome=true&RemoveWindowsHello=true&RemoveFamily=true&RemoveFeedbackHub=true&RemoveGetHelp=true&RemoveHandwriting=true&RemoveInternetExplorer=true&RemoveMailCalendar=true&RemoveMaps=true&RemoveMathInputPanel=true&RemoveMediaFeatures=true&RemoveMixedReality=true&RemoveZuneVideo=true&RemoveNews=true&RemoveNotepad=true&RemoveOffice365=true&RemoveOneDrive=true&RemoveOneNote=true&RemoveOneSync=true&RemoveOpenSSHClient=true&RemoveOutlook=true&RemovePaint=true&RemovePaint3D=true&RemovePeople=true&RemovePhotos=true&RemovePowerAutomate=true&RemovePowerShell2=true&RemoveQuickAssist=true&RemoveRecall=true&RemoveRdpClient=true&RemoveSkype=true&RemoveSnippingTool=true&RemoveSolitaire=true&RemoveSpeech=true&RemoveStepsRecorder=true&RemoveStickyNotes=true&RemoveTeams=true&RemoveGetStarted=true&RemoveToDo=true&RemoveVoiceRecorder=true&RemoveWallet=true&RemoveWeather=true&RemoveFaxAndScan=true&RemoveWindowsMediaPlayer=true&RemoveZuneMusic=true&RemoveWordPad=true&RemoveXboxApps=true&RemoveYourPhone=true&WdacMode=Skip&AppLockerMode=Skip
 -->
 <settings pass="offlineServicing"/>
 <settings pass="windowsPE">
+<component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+<UILanguage>en-US</UILanguage>
+</component>
 <component name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+<ImageInstall>
+<OSImage>
+<InstallFrom>
+<MetaData wcm:action="add">
+<Key>/IMAGE/NAME</Key>
+<Value>Windows 11 Pro</Value>
+</MetaData>
+</InstallFrom>
+<InstallTo>
+<DiskID>0</DiskID>
+<PartitionID>3</PartitionID>
+</InstallTo>
+</OSImage>
+</ImageInstall>
+<UserData>
+<ProductKey>
+<Key>VK7JG-NPHTM-C97JM-9MPGT-3V66T</Key>
+<WillShowUI>OnError</WillShowUI>
+</ProductKey>
+<AcceptEula>true</AcceptEula>
+</UserData>
+<UseConfigurationSet>false</UseConfigurationSet>
 <RunSynchronous>
 <RunSynchronousCommand wcm:action="add">
 <Order>1</Order>
 <Path>
-cmd.exe /c ">>"X:\diskpart.txt" (echo:SELECT DISK=0&echo:CLEAN&echo:CONVERT GPT&echo:CREATE PARTITION EFI SIZE=300&echo:FORMAT QUICK FS=FAT32 LABEL=^"System^"&echo:ASSIGN LETTER=S&echo:CREATE PARTITION MSR SIZE=16&echo:CREATE PARTITION PRIMARY)"
+reg.exe add "HKLM\SYSTEM\Setup\LabConfig" /v BypassTPMCheck /t REG_DWORD /d 1 /f
 </Path>
 </RunSynchronousCommand>
 <RunSynchronousCommand wcm:action="add">
 <Order>2</Order>
 <Path>
-cmd.exe /c ">>"X:\diskpart.txt" (echo:SHRINK MINIMUM=1000&echo:FORMAT QUICK FS=NTFS LABEL=^"Windows^"&echo:ASSIGN LETTER=W&echo:CREATE PARTITION PRIMARY&echo:FORMAT QUICK FS=NTFS LABEL=^"Recovery^"&echo:ASSIGN LETTER=R)"
+reg.exe add "HKLM\SYSTEM\Setup\LabConfig" /v BypassSecureBootCheck /t REG_DWORD /d 1 /f
 </Path>
 </RunSynchronousCommand>
 <RunSynchronousCommand wcm:action="add">
 <Order>3</Order>
 <Path>
-cmd.exe /c ">>"X:\diskpart.txt" (echo:SET ID=^"de94bba4-06d1-4d40-a16a-bfd50179d6ac^"&echo:GPT ATTRIBUTES=0x8000000000000001)"
+reg.exe add "HKLM\SYSTEM\Setup\LabConfig" /v BypassRAMCheck /t REG_DWORD /d 1 /f
 </Path>
 </RunSynchronousCommand>
 <RunSynchronousCommand wcm:action="add">
 <Order>4</Order>
 <Path>
-cmd.exe /c ">>"X:\pe.cmd" (echo:rem Set keyboard layout&echo:wpeutil.exe SetKeyboardLayout 0409:00000409&echo:@for ^%^%d in (C D E F G H I J K L M N O P Q T U V Y Z^) do @()"
+cmd.exe /c ">>"X:\diskpart.txt" (echo:SELECT DISK=0&echo:CLEAN&echo:CONVERT GPT&echo:CREATE PARTITION EFI SIZE=300&echo:FORMAT QUICK FS=FAT32 LABEL=^"System^"&echo:ASSIGN LETTER=S&echo:CREATE PARTITION MSR SIZE=16&echo:CREATE PARTITION PRIMARY)"
 </Path>
 </RunSynchronousCommand>
 <RunSynchronousCommand wcm:action="add">
 <Order>5</Order>
 <Path>
-cmd.exe /c ">>"X:\pe.cmd" (echo:if exist ^%^%d:\sources\install.wim set ^"IMAGE_FILE=^%^%d:\sources\install.wim^"&echo:if exist ^%^%d:\sources\install.esd set ^"IMAGE_FILE=^%^%d:\sources\install.esd^")"
+cmd.exe /c ">>"X:\diskpart.txt" (echo:SHRINK MINIMUM=1000&echo:FORMAT QUICK FS=NTFS LABEL=^"Windows^"&echo:ASSIGN LETTER=W&echo:CREATE PARTITION PRIMARY&echo:FORMAT QUICK FS=NTFS LABEL=^"Recovery^"&echo:ASSIGN LETTER=R)"
 </Path>
 </RunSynchronousCommand>
 <RunSynchronousCommand wcm:action="add">
 <Order>6</Order>
 <Path>
-cmd.exe /c ">>"X:\pe.cmd" (echo:if exist ^%^%d:\sources\install.swm set ^"IMAGE_FILE=^%^%d:\sources\install.swm^" ^& set ^"SWM_PARAM=/SWMFile:^%^%d:\sources\install*.swm^"&echo:if exist ^%^%d:\autounattend.xml set ^"XML_FILE=^%^%d:\autounattend.xml^")"
+cmd.exe /c ">>"X:\diskpart.txt" (echo:SET ID=^"de94bba4-06d1-4d40-a16a-bfd50179d6ac^"&echo:GPT ATTRIBUTES=0x8000000000000001)"
 </Path>
 </RunSynchronousCommand>
 <RunSynchronousCommand wcm:action="add">
 <Order>7</Order>
 <Path>
-cmd.exe /c ">>"X:\pe.cmd" (echo:if exist ^%^%d:\$OEM$ set ^"OEM_FOLDER=^%^%d:\$OEM$^"&echo:if exist ^%^%d:\$WinPEDriver$ set ^"PEDRIVERS_FOLDER=^%^%d:\$WinPEDriver$^"&echo:^))"
+cmd.exe /c "diskpart.exe /s "X:\diskpart.txt" >>"X:\diskpart.log" || ( type "X:\diskpart.log" & echo diskpart encountered an error. & pause & exit /b 1 )"
 </Path>
-</RunSynchronousCommand>
-<RunSynchronousCommand wcm:action="add">
-<Order>8</Order>
-<Path>
-cmd.exe /c ">>"X:\pe.cmd" (echo:for /f ^"tokens=3^" ^%^%t in ('reg.exe query HKLM\System\Setup /v UnattendFile 2^^^>nul'^) do ( if exist ^%^%t set ^"XML_FILE=^%^%t^" ^))"
-</Path>
-</RunSynchronousCommand>
-<RunSynchronousCommand wcm:action="add">
-<Order>9</Order>
-<Path>
-cmd.exe /c ">>"X:\pe.cmd" (echo:@if not defined IMAGE_FILE echo Could not locate install.wim, install.esd or install.swm. ^& pause ^& exit /b 1&echo:@if not defined XML_FILE echo Could not locate autounattend.xml. ^& pause ^& exit /b 1)"
-</Path>
-</RunSynchronousCommand>
-<RunSynchronousCommand wcm:action="add">
-<Order>10</Order>
-<Path>
-cmd.exe /c ">>"X:\pe.cmd" (echo:rem Install drivers from $WinPEDriver$ folder&echo:if defined PEDRIVERS_FOLDER (&echo:for /R ^%PEDRIVERS_FOLDER^% ^%^%f IN (*.inf^) do drvload.exe ^"^%^%f^"&echo:^))"
-</Path>
-</RunSynchronousCommand>
-<RunSynchronousCommand wcm:action="add">
-<Order>11</Order>
-<Path>
-cmd.exe /c ">>"X:\pe.cmd" (echo:diskpart.exe /s X:\diskpart.txt ^|^| ( echo diskpart.exe encountered an error. ^& pause ^& exit /b 1 ^))"
-</Path>
-</RunSynchronousCommand>
-<RunSynchronousCommand wcm:action="add">
-<Order>12</Order>
-<Path>
-cmd.exe /c ">>"X:\pe.cmd" (echo:dism.exe /Apply-Image /ImageFile:^%IMAGE_FILE^% ^%SWM_PARAM^% /Name:^"Windows 11 Pro^" /ApplyDir:W:\ ^|^| ( echo dism.exe encountered an error. ^& pause ^& exit /b 1 ^))"
-</Path>
-</RunSynchronousCommand>
-<RunSynchronousCommand wcm:action="add">
-<Order>13</Order>
-<Path>
-cmd.exe /c ">>"X:\pe.cmd" (echo:bcdboot.exe W:\Windows /s S: ^|^| ( echo bcdboot.exe encountered an error. ^& pause ^& exit /b 1 ^)&echo:mkdir W:\Windows\Panther&echo:copy ^%XML_FILE^% W:\Windows\Panther\unattend.xml&echo:if defined PEDRIVERS_FOLDER ()"
-</Path>
-</RunSynchronousCommand>
-<RunSynchronousCommand wcm:action="add">
-<Order>14</Order>
-<Path>
-cmd.exe /c ">>"X:\pe.cmd" (echo:dism.exe /Add-Driver /Image:W:\ /Driver:^"^%PEDRIVERS_FOLDER^%^" /Recurse&echo:^)&echo:rem Set device setup region&echo:reg.exe LOAD HKLM\mount W:\Windows\System32\config\SOFTWARE)"
-</Path>
-</RunSynchronousCommand>
-<RunSynchronousCommand wcm:action="add">
-<Order>15</Order>
-<Path>
-cmd.exe /c ">>"X:\pe.cmd" (echo:reg.exe ADD ^"HKLM\mount\Microsoft\Windows\CurrentVersion\Control Panel\DeviceRegion^" /v DeviceRegion /t REG_DWORD /d 244 /f&echo:reg.exe UNLOAD HKLM\mount&echo:rem Continue with next stage of Windows Setup after reboot)"
-</Path>
-</RunSynchronousCommand>
-<RunSynchronousCommand wcm:action="add">
-<Order>16</Order>
-<Path>
-cmd.exe /c ">>"X:\pe.cmd" (echo:wpeutil.exe reboot)"
-</Path>
-</RunSynchronousCommand>
-<RunSynchronousCommand wcm:action="add">
-<Order>17</Order>
-<Path>cmd.exe /c "X:\pe.cmd"</Path>
 </RunSynchronousCommand>
 </RunSynchronous>
 </component>
